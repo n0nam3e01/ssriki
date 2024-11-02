@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI HTML</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f8ff;
+            transition: background-color 0.5s; /* Плавный переход фона */
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(-20px); /* Начальная позиция для анимации */
+            animation: fadeIn 0.5s forwards; /* Анимация появления */
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            transition: color 0.3s; /* Плавный переход цвета заголовка */
+        }
+        h1:hover {
+            color: #007bff; /* Цвет при наведении */
+        }
+        h2 {
+            color: #555;
+        }
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: border-color 0.3s; /* Плавный переход цвета рамки */
+        }
+        textarea:focus, input:focus {
+            border-color: #007bff; /* Цвет рамки при фокусе */
+            outline: none; /* Убираем обводку */
+        }
+        button {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.2s; /* Плавный переход фона и трансформации */
+        }
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px); /* Подъём кнопки при наведении */
+        }
+        button:active {
+            transform: translateY(1px); /* Опускание кнопки при нажатии */
+        }
+        #answer {
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+            margin-top: 10px;
+            color: #333;
+            opacity: 0; /* Скрываем ответ изначально */
+            transition: opacity 0.5s; /* Плавный переход для появления ответа */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI ИИ</h1>
+        <textarea id="context" rows="5" placeholder="Введите контекст..."></textarea>
+        <input type="text" id="question" placeholder="Введите ваш вопрос...">
+        <button onclick="askQuestion()">Спросить</button>
+        <h2>Ответ:</h2>
+        <p id="answer"></p>
+    </div>
+
+    <script>
+        async function askQuestion() {
+            const question = document.getElementById('question').value;
+            const context = document.getElementById('context').value;
+
+            const response = await fetch('/ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ question, context })
+            });
+
+            const data = await response.json();
+            const answerElement = document.getElementById('answer');
+            answerElement.innerText = data.answer || 'Ответ не найден.';
+            answerElement.style.opacity = 1; // Показать ответ с анимацией
+        }
+    </script>
+</body>
+</html>
